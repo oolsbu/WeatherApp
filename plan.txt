@@ -1,0 +1,19 @@
+folder structure
+
+-assets
+ |
+ components
+ |  |
+ |  Todays forecast
+ |  7 day forecast
+ |  footer
+ |  header
+ |  search bar
+ |  (error)
+ |  |
+ |  Usefull info (UV-index, wind-speed, gust-speed, precipiaton amount, wind direction)
+ |
+ elements
+ |  |
+    weather icons (icon, size)
+    card(react props (html elements))

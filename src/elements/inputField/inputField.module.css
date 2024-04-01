@@ -1,0 +1,11 @@
+.inputField {
+  border: solid 2px #f0f0f0;
+  box-shadow: none;
+  border-radius: 17px 0px 0 17px;
+  font-size: 14px;
+  width: 640px;
+  padding: 10px;
+}
+.inputField_wrapper {
+  border: none;
+}
