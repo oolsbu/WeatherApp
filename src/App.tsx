@@ -71,6 +71,7 @@ interface WeatherForecast {
 
 function App() {
   const [searchValue, setSearchValue] = useState("");
+  const [newDayIndex, setNewDayIndex] = useState<number[]>([]);
   const [lat, setLat] = useState<number>(60);
   const [lon, setLon] = useState<number>(11);
   const [weatherForecast, setWeatherForecast] = useState<WeatherForecast | null>(null);
@@ -118,6 +119,79 @@ function App() {
     const date = new Date(isoTime);
     return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
   };
+
+  const findDayIndexes = (timeseries: WeatherData[]) => {
+    const dayIndexes: number[] = [0];
+  
+    // Assuming timeseries is sorted by date
+    for (let i = 0; i < timeseries.length - 1; i++) {
+      const currentDate = new Date(timeseries[i].time);
+      const nextDate = new Date(timeseries[i + 1].time);
+  
+      // Adjust time zone offset
+      const currentUTCTime = Date.UTC(
+        currentDate.getUTCFullYear(),
+        currentDate.getUTCMonth(),
+        currentDate.getUTCDate()
+      );
+  
+      const nextUTCTime = Date.UTC(
+        nextDate.getUTCFullYear(),
+        nextDate.getUTCMonth(),
+        nextDate.getUTCDate()
+      );
+  
+      // Check if next date is different from current date
+      if (currentUTCTime !== nextUTCTime) {
+        dayIndexes.push(i + 1); 
+      }
+    }
+  
+    setNewDayIndex(dayIndexes)
+  };
+  
+  useEffect(() => {
+    findDayIndexes(weatherForecast?.properties.timeseries ?? []);
+  }, [weatherForecast]);
+  
+
+  const findMaxTemperature = (timeseries: WeatherData[], dayIndexes: number[], dayIndex: number): number => {
+  
+    const startIndex = dayIndexes[dayIndex];
+    const endIndex = dayIndexes[dayIndex + 1] - 1; // Exclude the next day index
+    
+    let temps:number[] = []
+  
+    for (let j = startIndex; j <= endIndex; j++) {
+      let temperature = timeseries[j].data.instant.details.air_temperature;
+      temps.push(temperature)
+    }
+    const dayMaxTemperature = Math.max(...temps);
+    console.log(temps)
+  
+    return Math.round(dayMaxTemperature);
+  };
+
+  const findMinTemperature = (timeseries: WeatherData[], dayIndexes: number[], dayIndex: number): number => {
+  
+    const startIndex = dayIndexes[dayIndex];
+    const endIndex = dayIndexes[dayIndex + 1] - 1;
+  
+    
+    let temps:number[] = []
+  
+    for (let j = startIndex; j <= endIndex; j++) {
+      let temperature = timeseries[j].data.instant.details.air_temperature;
+      temps.push(temperature)
+    }
+    const dayMinTemperature = Math.min(...temps);
+   
+  
+    return Math.round(dayMinTemperature);
+  };
+  
+  
+  
 
   return (
     <div className="main">
@@ -187,44 +261,44 @@ function App() {
           <WeeklyForecast
             day="Monday"
             weatherCode="clearsky_day"
-            tempMax={24}
-            tempMin={12}
+            tempMax={findMaxTemperature(weatherForecast?.properties.timeseries ?? [], newDayIndex, 0)}
+            tempMin={findMinTemperature(weatherForecast?.properties.timeseries ?? [], newDayIndex, 0)}
           />
           <WeeklyForecast
             day="Monday"
             weatherCode="clearsky_day"
-            tempMax={24}
-            tempMin={12}
+            tempMax={findMaxTemperature(weatherForecast?.properties.timeseries ?? [], newDayIndex, 1)}
+            tempMin={findMinTemperature(weatherForecast?.properties.timeseries ?? [], newDayIndex, 1)}
           />
           <WeeklyForecast
             day="Monday"
             weatherCode="clearsky_day"
-            tempMax={24}
-            tempMin={12}
+            tempMax={findMaxTemperature(weatherForecast?.properties.timeseries ?? [], newDayIndex, 2)}
+            tempMin={findMinTemperature(weatherForecast?.properties.timeseries ?? [], newDayIndex, 2)}
           />
           <WeeklyForecast
             day="Monday"
             weatherCode="clearsky_day"
-            tempMax={24}
-            tempMin={12}
+            tempMax={findMaxTemperature(weatherForecast?.properties.timeseries ?? [], newDayIndex, 3)}
+            tempMin={findMinTemperature(weatherForecast?.properties.timeseries ?? [], newDayIndex, 3)}
           />
           <WeeklyForecast
             day="Monday"
             weatherCode="clearsky_day"
-            tempMax={24}
-            tempMin={12}
+            tempMax={findMaxTemperature(weatherForecast?.properties.timeseries ?? [], newDayIndex, 4)}
+            tempMin={findMinTemperature(weatherForecast?.properties.timeseries ?? [], newDayIndex, 4)}
           />
           <WeeklyForecast
             day="Monday"
             weatherCode="clearsky_day"
-            tempMax={24}
-            tempMin={12}
+            tempMax={findMaxTemperature(weatherForecast?.properties.timeseries ?? [], newDayIndex, 5)}
+            tempMin={findMinTemperature(weatherForecast?.properties.timeseries ?? [], newDayIndex, 5)}
           />
           <WeeklyForecast
             day="Monday"
             weatherCode="clearsky_day"
-            tempMax={24}
-            tempMin={12}
+            tempMax={findMaxTemperature(weatherForecast?.properties.timeseries ?? [], newDayIndex, 6)}
+            tempMin={findMinTemperature(weatherForecast?.properties.timeseries ?? [], newDayIndex, 6)}
           />
         </Card>
       </div>
