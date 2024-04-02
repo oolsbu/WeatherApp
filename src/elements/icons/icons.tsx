@@ -4,9 +4,10 @@ import assetMapping from "../../assets/assetMapping.json";
 interface Props {
   weatherCode: string  | undefined;
   size: string;
+  rotation?: number;
 }
 
-function Icons({ weatherCode, size }: Props) {
+function Icons({ weatherCode, size, rotation }: Props) {
   const [weatherIcon, setWeatherIcon] = useState<string | null>(null);
 
   useEffect(() => {
@@ -24,13 +25,15 @@ function Icons({ weatherCode, size }: Props) {
     importWeatherIcon();
   }, [weatherCode]);
 
+  const adjustment = rotation ?  rotation + 90 : 0
+
   return (
     <>
       {weatherIcon && (
         <img
           src={weatherIcon}
           alt="Weather icon"
-          style={{ width: size, height: size }}
+          style={{ width: size, height: size,  rotate: adjustment + "deg" }}
         />
       )}
     </>
