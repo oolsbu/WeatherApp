@@ -1,14 +1,14 @@
 .time {
   color: #030303;
-  font-size: 16px;
+  font-size: 1rem;
   font-family: "Montserrat";
   font-weight: 600;
-  line-height: 22px;
+  line-height: 2rem;
   text-align: center;
 }
 .temp {
   color: #030303;
-  font-size: 24px;
+  font-size: 2rem;
   font-family: "Montserrat";
   font-weight: 600;
   line-height: 30px;

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import assetMapping from "../../assets/assetMapping.json";
 
 interface Props {
-  weatherCode: string;
+  weatherCode: string  | undefined;
   size: string;
 }
 
